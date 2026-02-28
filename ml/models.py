@@ -1,3 +1,5 @@
+# ml/models.py
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -31,7 +33,6 @@ class GeneralizedMeanPooling(nn.Module):
         x = x.pow(1.0 / self.exponent)
         return x
 
-
 class SqueezeExcitationBlock(nn.Module):
     def __init__(self, number_of_channels: int, squeeze_ratio: int):
         super().__init__()
@@ -49,7 +50,6 @@ class SqueezeExcitationBlock(nn.Module):
         gating = self.expand(gating)
         gating = torch.sigmoid(gating)
         return x * gating
-
 
 class DepthwiseSeparableBottleneckBlock(nn.Module):
     def __init__(
@@ -205,7 +205,6 @@ class DualPoolingProjection(nn.Module):
         stacked = torch.cat([generalized_mean, average], dim=1)  # [N,2C,1,1]
         return self.projection(stacked)
 
-
 class AuxiliaryKnowledgeBranch(nn.Module):
     def __init__(
         self,
@@ -227,7 +226,6 @@ class AuxiliaryKnowledgeBranch(nn.Module):
         x = self.pooling(x)
         return self.projection(x)
 
-
 class GatedFeatureFusionClassifier(nn.Module):
     def __init__(self, embedding_dimension: int, number_of_classes: int, dropout_probability: float):
         super().__init__()
@@ -248,7 +246,6 @@ class GatedFeatureFusionClassifier(nn.Module):
         gating_values = self.gating_network(torch.cat([main_embedding, auxiliary_embedding], dim=1))
         fused_embedding = (gating_values * main_embedding) + ((1.0 - gating_values) * auxiliary_embedding)
         return self.classifier(fused_embedding)
-
 
 # -----------------------------
 # Architectures
@@ -484,11 +481,7 @@ def _load_state_dict_strict(*, model: nn.Module, state_dict_path: Path, device: 
 
     if not isinstance(state_dict, dict):
         raise RuntimeError(f"Expected a raw state_dict dict at: {state_dict_path}")
-
-    # Handle common DataParallel prefix
-    if any(str(key).startswith("module.") for key in state_dict.keys()):
-        state_dict = {str(key).replace("module.", "", 1): value for key, value in state_dict.items()}
-
+    
     model.load_state_dict(state_dict, strict=True)
     model.to(device)
     model.eval()

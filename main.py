@@ -1,3 +1,5 @@
+# main.py
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -16,9 +18,7 @@ IMAGE_PATHS = [
 ]
 
 def _format_probability(probability: float) -> str:
-    # UI-friendly formatting. Keep as percent with 2 decimals.
     return f"{probability * 100.0:6.2f}%"
-
 
 def main() -> None:
     
@@ -40,8 +40,7 @@ def main() -> None:
             allow_ties_ensemble=True,
         )
 
-        print("")
-        print(f"🖼️ {image_path.name}")
+        print(f"\n\n🖼️🖼️🖼️🖼️🖼️🖼️ {image_path.name} 🖼️🖼️🖼️🖼️🖼️🖼️")
 
         for model_name in pretty.model_list:
             entry = pretty.model_result_table[model_name]

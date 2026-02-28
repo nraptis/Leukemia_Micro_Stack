@@ -1,4 +1,4 @@
-# preprocess.py
+# ml/preprocess.py
 
 import numpy as np
 from PIL import Image

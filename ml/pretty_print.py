@@ -1,3 +1,5 @@
+# ml/pretty_print.py
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -7,7 +9,6 @@ import numpy as np
 
 from ml.labels import CLASS_NAMES
 from ml.classify import ClassifyResult
-
 
 PRETTY_MODEL_ORDER: List[str] = [
     "iguana_gold",
@@ -27,19 +28,16 @@ class PrettyPrintSingleModelResult:
     class_list: List[str]
     class_table: Dict[str, float]
 
-
 @dataclass(frozen=True)
 class PrettyPrintSingleItemResult:
     class_name: str
     probability: float
-
 
 @dataclass(frozen=True)
 class PrettyPrintResult:
     model_result_table: Dict[str, PrettyPrintSingleModelResult]
     model_list: List[str]
     ensemble_list: List[PrettyPrintSingleItemResult]
-
 
 # -----------------------------
 # Ranking Helpers
@@ -52,7 +50,6 @@ def _sorted_items(probabilities: np.ndarray) -> List[Tuple[str, float]]:
     ]
     items.sort(key=lambda pair: (-pair[1], pair[0]))
     return items
-
 
 def _top_k_with_ties(
     items: List[Tuple[str, float]],

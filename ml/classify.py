@@ -1,3 +1,5 @@
+# ml/classify.py
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -85,13 +87,10 @@ def _image_to_tensor(image: Image.Image) -> torch.Tensor:
     array = np.transpose(array, (2, 0, 1))
     return torch.from_numpy(array)
 
-
 _ensemble_models_cache: Optional[Dict[str, nn.Module]] = None
-
 
 def _get_device() -> torch.device:
     return torch.device("cpu")
-
 
 def _load_ensemble_models_if_needed(device: torch.device) -> Dict[str, nn.Module]:
     global _ensemble_models_cache
@@ -111,7 +110,6 @@ def _load_ensemble_models_if_needed(device: torch.device) -> Dict[str, nn.Module
     _ensemble_models_cache = models
     return models
 
-
 @torch.inference_mode()
 def _run_member(
     device: torch.device,
@@ -122,7 +120,6 @@ def _run_member(
     logits = model(batch)
     probabilities = F.softmax(logits, dim=1)[0]
     return probabilities.detach().cpu().numpy().astype(np.float64)
-
 
 # -----------------------------
 # Public API
